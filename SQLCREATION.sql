@@ -8,7 +8,7 @@ cName varchar(30)
 
 Create Table TUser
 (
-nUserId int Primary key,
+nUserId int IDENTITY Primary key,
 cName varchar(255) not null,
 cSurname varchar(255) not null,
 cAddress varchar(100) not null,
@@ -20,7 +20,7 @@ cZipCode varchar(4) FOREIGN KEY REFERENCES TCity(cZipCode)
 
 Create Table TCreditCard
 (
-nCreditCardId int Primary key,
+nCreditCardId int IDENTITY Primary key,
 cCardNumber varchar(16) not null,
 cCardHolder varchar(100) not null,
 cExpiringDate varchar(5) not null,
@@ -31,7 +31,7 @@ nUserId int FOREIGN KEY REFERENCES TUser(nUserId)
 
 Create Table TInvoice
 (
-nInvoiceId int Primary key,
+nInvoiceId int IDENTITY Primary key,
 nTotalPrice money not null,
 nVAT money not null,
 nCreditCardId int FOREIGN KEY REFERENCES TCreditCard(nCreditCardId)
@@ -39,7 +39,7 @@ nCreditCardId int FOREIGN KEY REFERENCES TCreditCard(nCreditCardId)
 
 Create Table TProduct
 (
-nProductId int Primary key,
+nProductId int IDENTITY Primary key,
 cName varchar(255) not null,
 cDescription varchar(2048),
 nUnitPrice money not null,

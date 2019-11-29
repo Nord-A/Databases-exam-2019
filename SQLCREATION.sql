@@ -4,10 +4,11 @@ Create Table TCity
 (
 cZipCode varchar(4) Primary Key,
 cName varchar(30),
-dValidFrom DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-dValidTo DATETIME NOT NULL DEFAULT 9999/12/31
+dValidFrom DATETIME2 (2) GENERATED ALWAYS AS ROW START,
+dValidTo DATETIME2 (2) GENERATED ALWAYS AS ROW END,
+PERIOD FOR SYSTEM_TIME (dValidFrom, dValidTo)
 )
-WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = dbo.CityHistory));
+WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = dbo.TCityHistory));
 
 Create Table TUser
 (
@@ -19,8 +20,9 @@ cPhoneNumber varchar(8) not null,
 cEmail varchar(320) not null,
 nTotalPurchase money not NULL DEFAULT 0,
 cZipCode varchar(4) FOREIGN KEY REFERENCES TCity(cZipCode),
-dValidFrom DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-dValidTo DATETIME NOT NULL DEFAULT 9999/12/31
+dValidFrom DATETIME2 (2) GENERATED ALWAYS AS ROW START,
+dValidTo DATETIME2 (2) GENERATED ALWAYS AS ROW END,
+PERIOD FOR SYSTEM_TIME (dValidFrom, dValidTo)
 )
 WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = dbo.UserHistory));
 
@@ -70,7 +72,11 @@ nProductId int FOREIGN KEY REFERENCES TProduct(nProductId),
 nStar tinyint not null,
 cComment varchar(2048),
 primary key (nUserId, nProductId),
-dValidFrom DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-dValidTo DATETIME NOT NULL DEFAULT 9999/12/31
+dValidFrom DATETIME2 (2) GENERATED ALWAYS AS ROW START,
+dValidTo DATETIME2 (2) GENERATED ALWAYS AS ROW END,
+PERIOD FOR SYSTEM_TIME (dValidFrom, dValidTo)
 )
 WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = dbo.RatingHistory));
+
+ALTER TABLE TProduct
+ADD nMinimumStock int not null;

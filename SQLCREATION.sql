@@ -3,8 +3,11 @@
 Create Table TCity
 (
 cZipCode varchar(4) Primary Key,
-cName varchar(30)
+cName varchar(30),
+dValidFrom DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+dValidTo DATETIME NOT NULL DEFAULT 9999/12/31
 )
+WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = dbo.CityHistory));
 
 Create Table TUser
 (
@@ -14,9 +17,12 @@ cSurname varchar(255) not null,
 cAddress varchar(100) not null,
 cPhoneNumber varchar(8) not null,
 cEmail varchar(320) not null,
-nTotalPurchase money not null,
-cZipCode varchar(4) FOREIGN KEY REFERENCES TCity(cZipCode)
-);
+nTotalPurchase money not NULL DEFAULT 0,
+cZipCode varchar(4) FOREIGN KEY REFERENCES TCity(cZipCode),
+dValidFrom DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+dValidTo DATETIME NOT NULL DEFAULT 9999/12/31
+)
+WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = dbo.UserHistory));
 
 Create Table TCreditCard
 (
@@ -25,7 +31,7 @@ cCardNumber varchar(16) not null,
 cCardHolder varchar(100) not null,
 cExpiringDate varchar(5) not null,
 cCCV varchar(4) not null,
-nTotalPurchase money not null,
+nTotalPurchase money not NULL DEFAULT 0,
 nUserId int FOREIGN KEY REFERENCES TUser(nUserId)
 )
 
@@ -34,7 +40,8 @@ Create Table TInvoice
 nInvoiceId int IDENTITY Primary key,
 nTotalPrice money not null,
 nVAT money not null,
-nCreditCardId int FOREIGN KEY REFERENCES TCreditCard(nCreditCardId)
+nCreditCardId int FOREIGN KEY REFERENCES TCreditCard(nCreditCardId),
+nUserId INT FOREIGN KEY REFERENCES dbo.TUser(nUserId)
 )
 
 Create Table TProduct
@@ -56,11 +63,14 @@ nUnitPrice money not null,
 primary key (nProductId, nInvoiceId)
 )
 
-Create Table TRaiting
+Create Table TRating
 (
 nUserId int FOREIGN KEY REFERENCES TUser(nUserId),
 nProductId int FOREIGN KEY REFERENCES TProduct(nProductId),
 nStar tinyint not null,
 cComment varchar(2048),
-primary key (nUserId, nProductId)
+primary key (nUserId, nProductId),
+dValidFrom DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+dValidTo DATETIME NOT NULL DEFAULT 9999/12/31
 )
+WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = dbo.RatingHistory));

@@ -80,3 +80,6 @@ WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = dbo.RatingHistory));
 
 ALTER TABLE TProduct
 ADD nMinimumStock int not null;
+                              
+ALTER TABLE TCreditCard
+ALTER COLUMN nUserId int NOT NULL;
